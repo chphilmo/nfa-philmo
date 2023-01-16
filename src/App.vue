@@ -154,14 +154,14 @@ export default {
     };
   },
   metaInfo() {
-    return { 
-      title: "wallet.ecosys",
+    return {
+      title: "NFA | Non Fungible Applications",
       meta: [
-        { vmid: 'description', name: 'description', content:  'wallet.ecosys' },
-        { vmid: 'og:title', property: 'og:title', content: "wallet.ecosys" },
-        { vmid: 'og:site_name', property: 'og:site_name', content: 'wallet.ecosys' },
-        { vmid: 'og:type', property: 'og:type', content: 'website' },    
-        { name: 'robots', content: 'index,follow' } 
+        { vmid: 'description', name: 'description', content: 'Non Fungible Applications' },
+        { vmid: 'og:title', property: 'og:title', content: "NFA | Non Fungible Applications" },
+        { vmid: 'og:site_name', property: 'og:site_name', content: 'nfa.philmo.ch' },
+        { vmid: 'og:type', property: 'og:type', content: 'website' },
+        { name: 'robots', content: 'index,follow' }
       ]
     }
   },
