@@ -1,0 +1,35 @@
+
+
+// Base colors definitions
+$red1: #3c5ba0 !default;
+$red2: #7070e8 !default;
+$red3: #3d9fc1 !default;
+$red4: #2058d3 !default;
+
+
+// Theme color default definitions
+$nature1: $red1 !default;
+$nature2: $red2 !default;
+$nature3: $red3 !default;
+$nature4: $red4 !default;
+
+
+// This table defines the theme colors (variant names)
+$theme-colors: () !default;
+$theme-colors: map-merge(
+  (
+    'nature1': $nature1,
+    'nature2': $nature2,
+    'nature3': $nature3,
+    'nature4': $nature4,
+  ),
+  $theme-colors
+);
+
+$font-family-base: 'Helvetica Neue';
+
+
+// Include Bootstrap and BootstrapVue SCSS files
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap-vue/src/index.scss';
+
