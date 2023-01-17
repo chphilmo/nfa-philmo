@@ -2,8 +2,6 @@ import NfaService from '../services/nfa.service';
 
 require('dotenv').config();
 const API_URL = process.env.VUE_APP_API_URL;
-const PUBLIC_KEY = process.env.VUE_APP_PUBLIC_KEY;
-const PRIVATE_KEY = process.env.VUE_APP_PRIVATE_KEY;
 
 const { createAlchemyWeb3 } = require("@alch/alchemy-web3");
 const web3 = createAlchemyWeb3(API_URL);
@@ -38,7 +36,7 @@ export const nfa = {
         },
         error => {
           console.log(error)
-        
+
           return Promise.reject(error);
         }
       );
@@ -49,19 +47,19 @@ export const nfa = {
 
       // get contract total supply and call tokenUri function for each token
       const totalSupply = await nftContract.methods.totalSupply().call();
-      
+
       const nfa = [];
 
       for (let i = 0; i < totalSupply; i++) {
         const nfaData = await nftContract.methods.tokenURI(i).call();
         nfa.push(nfaData);
-  
-        
+
+
       }
       commit('loadNfa', nfa);
     },
 
-    
+
     async mint({ commit }, payload) {
       const address = payload.walletAddress;
 
@@ -74,8 +72,8 @@ export const nfa = {
       const transactionParameters = {
         to: contractAddress, // Required except during contract publications.
         from: window.ethereum.selectedAddress, // must match user's active address.
-        'data': nftContract.methods.mint(window.ethereum.selectedAddress, payload.name, payload.description, 
-          payload.externalUrl, payload.ENS, payload.commitHash, payload.gitRepository, payload.animation ).encodeABI() //make call to NFT smart contract 
+        'data': nftContract.methods.mint(window.ethereum.selectedAddress, payload.name, payload.description,
+          payload.externalUrl, payload.ENS, payload.commitHash, payload.gitRepository, payload.animation).encodeABI() //make call to NFT smart contract 
       };
       //sign transaction via Metamask
       try {
@@ -91,43 +89,6 @@ export const nfa = {
         console.log("Something went wrong when submitting your transaction:", error.message)
         commit('setMessage', error.message);
       }
-
-    },
-    async publicMintNft({ commit }, payload) {
-      const address = payload.address;
-      //const tokenURI = 'http://api.meta-matic.io/api/playground/' + payload.id;
-      const tokenURI = payload.ipfs;
-
-
-      if (!window.ethereum || address === null) {
-        return;
-      }
-      const nonce = await web3.eth.getTransactionCount(PUBLIC_KEY, 'latest');
-
-      const tx = {
-        'from': this.walletAddress,
-        'to': contractAddress,
-        'nonce': nonce,
-        'gas': 500000,
-        'data': nftContract.methods.mintNFT(PUBLIC_KEY, tokenURI).encodeABI()
-      };
-
-      const signPromise = web3.eth.accounts.signTransaction(tx, PRIVATE_KEY);
-      signPromise.then((signedTx) => {
-
-        web3.eth.sendSignedTransaction(signedTx.rawTransaction, function (err, hash) {
-          if (!err) {
-            console.log("The hash of your transaction is: ", hash, "\nCheck Alchemy's Mempool to view the status of your transaction!");
-            commit('setMessage', hash);
-          } else {
-            console.log("Something went wrong when submitting your transaction:", err)
-            commit('setMessage', err);
-          }
-        });
-      }).catch((err) => {
-        console.log(" Promise failed:", err);
-        commit('setMessage', err);
-      });
 
     },
     async burnNft({ commit }, payload) {
@@ -218,31 +179,6 @@ export const nfa = {
       }
 
       await nftContract.methods.unlistNFT(nftId)
-        .send({
-          'from': wAddress,
-          'gas': 200000
-        })
-        .on("confirmation", () => {
-          commit('setMessage', "Completed")
-        })
-        .catch(function (error) {
-          console.log(error);
-          commit('setMessage', error);
-        })
-
-    },
-    async changeOwner({ commit }, payload) {
-
-      const nftId = payload.id;
-      const wAddress = payload.address;
-
-
-      if (!window.ethereum) {
-        commit('setMessage', "You must install Metamask 🦊, a virtual Ethereum wallet, in your browser.");
-        return;
-      }
-
-      await nftContract.methods.changeOwner(wAddress, nftId)
         .send({
           'from': wAddress,
           'gas': 200000
@@ -388,7 +324,7 @@ export const nfa = {
   getters: {
     loadedImgUrl(state) {
       //return state.loadedMatter.reverse()
-      return state.sketchImgUrl;
+      return state.imageUrl;
     },
     loadedNfas(state) {
       //return state.nfaArray.reverse()

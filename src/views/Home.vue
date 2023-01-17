@@ -11,7 +11,7 @@
 
             </b-col>
             <b-col md="6" sm="6" class="mt-3">
-              <b-img class="mb-3" src="/galaxy.png" fluid></b-img>
+              <b-img class="mb-3" src="/blockchain.png" fluid></b-img>
             </b-col>
           </b-row>
         </div>
@@ -141,6 +141,23 @@
       </div>
     </div>
 
+    <div class="block6">
+      <div class="container text-light">
+
+
+       
+        <b-row align-v="center" class="mt-3 text-center">
+          <b-col md="12" sm="12">
+
+           <h4>Interoperability</h4>
+
+
+          </b-col>
+
+        </b-row>
+
+      </div>
+    </div>
 
     <div class="block7">
       <div class="container text-dark">
@@ -196,8 +213,6 @@
       </div>
     </div>
 
-
-
     <div class="blockintro">
 
 <div class="container text-dark">
@@ -244,8 +259,7 @@
             </div>
             <div clas="mt-3">
               <a href="https://goerli.etherscan.io/address/0x1A1A411975AcF268C966a8835b430Ba02e7AbecB">
-    Contract</a> |
-    <a href="https://etherscan.io/token/0x8b7da288348D4668B037e07213784692799806b9">Token</a>
+    Contract</a> | Token
             </div>
             <div class="mt-3">
             
@@ -406,8 +420,8 @@ export default {
 }
 
 .block6 {
-  background: linear-gradient(to bottom, #f2e9ba, #B9F6CA);
-  height: 100vh;
+  background: linear-gradient(to bottom, #2058d3, #3d9fc1);
+  height: 40vh;
   display: flex;
   flex-direction: column;
   justify-content: center;

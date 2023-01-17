@@ -92,6 +92,8 @@
 
         <img :src="imageUrl" height="200">
 
+        <div class="add">{{ imgUrl }}</div>
+
         
       </div>
 
@@ -182,6 +184,9 @@ export default {
         return String(this.walletAddress);
       }
     },
+    imgUrl () {
+      return this.$store.getters['nfa/loadedImgUrl'];
+    }
   
   },
   mounted() {
@@ -200,7 +205,7 @@ export default {
           const mintData = {
             name: this.nfa.name,
             description: this.nfa.description, 
-            image: this.imgUrl.imageUrl,
+            image: `https://ipfs.io/ipfs/${this.imgUrl}`,
             externalUrl: this.nfa.externalUrl,
             ENS: this.nfa.ENS,
             commitHash: this.nfa.commitHash,
@@ -253,5 +258,8 @@ export default {
   -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+.add {
+    font-size: 10pt;
 }
 </style>

@@ -10,7 +10,7 @@ class NfaService {
     formData.append("file", matter);
     
     return api
-      .post("/fleek/upload", formData, 
+      .post("/aws/upload", formData, 
       {
         headers: {
           "Content-Type": "multipart/form-data" }
