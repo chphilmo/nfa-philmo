@@ -145,11 +145,11 @@
       <div class="container text-light">
 
 
-       
+
         <b-row align-v="center" class="mt-3 text-center">
           <b-col md="12" sm="12">
 
-           <h4>Interoperability</h4>
+            <h4>Interoperability</h4>
 
 
           </b-col>
@@ -184,7 +184,7 @@
           </b-col>
           <b-col md="6" sm="6">
 
-            <b-img class="mb-3" src="/ecom.png" fluid></b-img>
+            <b-img class="mb-3" src="/blockchip.png" fluid></b-img>
 
           </b-col>
         </b-row>
@@ -192,7 +192,7 @@
           <b-col md="6" sm="6">
 
 
-            <b-img class="mb-3" src="/ipfs.png" fluid></b-img>
+            <b-img class="mb-3" src="/ecom.png" fluid></b-img>
 
 
           </b-col>
@@ -215,79 +215,79 @@
 
     <div class="blockintro">
 
-<div class="container text-dark">
+      <div class="container text-dark">
 
 
 
 
 
-  <b-row class="text-justify" align-v="center">
-    <b-col md="12" sm="12">
-      <div class="block1">
+        <b-row class="text-justify" align-v="center">
+          <b-col md="12" sm="12">
+            <div class="block1">
 
 
-        <h1>SMART CONTRACT</h1>
+              <h1>SMART CONTRACT</h1>
 
-        <b-row>
-          <b-col md="6" sm="6">
+              <b-row>
+                <b-col md="6" sm="6">
 
-            <h4>Overview</h4>
-            <div>
-              <ul>
-                <li>
-                  <b>ERC721</b> standard interface for non-fungible tokens.
-                </li>
-                <li>
-                  <b>ERC165</b> standard interface detection.
-                </li>
-                <li>
-                  <b>ERC2981</b> royalty standard interface.
-                </li>
-                <li>
-                  <b>AccessControl</b> contract for role-based access control.
-                </li>
-                <li>
-                  <b>Self destruct</b> removing the contract from the blockchain.
-                </li>
-              </ul>
-              
-            </div>
-          </b-col>
-          <b-col md="6" sm="6">
-            <div class="mt-3">
-              <b>Goerli testnet</b>
-            </div>
-            <div clas="mt-3">
-              <a href="https://goerli.etherscan.io/address/0x1A1A411975AcF268C966a8835b430Ba02e7AbecB">
-    Contract</a> | Token
-            </div>
-            <div class="mt-3">
-            
-              <b-button variant="nature1"  size="md">
-              <b-icon icon="code"></b-icon> Interact
-            </b-button>
-            </div>
-          </b-col>
-        </b-row>
+                  <h4>Overview</h4>
+                  <div>
+                    <ul>
+                      <li>
+                        <b>ERC721</b> standard interface for non-fungible tokens.
+                      </li>
+                      <li>
+                        <b>ERC165</b> standard interface detection.
+                      </li>
+                      <li>
+                        <b>ERC2981</b> royalty standard interface.
+                      </li>
+                      <li>
+                        <b>AccessControl</b> contract for role-based access control.
+                      </li>
+                      <li>
+                        <b>Self destruct</b> removing the contract from the blockchain.
+                      </li>
+                    </ul>
 
-        <div>
-          <code>
+                  </div>
+                </b-col>
+                <b-col md="6" sm="6">
+                  <div class="mt-3">
+                    <b>Goerli testnet</b>
+                  </div>
+                  <div clas="mt-3">
+                    <a href="https://goerli.etherscan.io/address/0x1A1A411975AcF268C966a8835b430Ba02e7AbecB">
+                      Contract</a> | Token
+                  </div>
+                  <div class="mt-3">
+
+                    <b-button variant="nature1" size="md">
+                      <b-icon icon="code"></b-icon> Interact
+                    </b-button>
+                  </div>
+                </b-col>
+              </b-row>
+
+              <div>
+                <code>
             <pre>
               
             </pre>
           </code>
-        </div>
+              </div>
 
 
+
+            </div>
+          </b-col>
+
+
+        </b-row>
 
       </div>
-    </b-col>
-
-
-  </b-row>
-
-</div>
-</div>
+    </div>
 
 
 
