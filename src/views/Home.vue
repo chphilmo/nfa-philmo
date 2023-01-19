@@ -270,13 +270,7 @@
                 </b-col>
               </b-row>
 
-              <div>
-                <code>
-            <pre>
-              
-            </pre>
-          </code>
-              </div>
+
 
 
 
