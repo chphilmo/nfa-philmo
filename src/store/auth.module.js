@@ -2,13 +2,15 @@ import AuthService from '../services/auth.service';
 require('dotenv').config();
 const API_URL = process.env.VUE_APP_API_URL;
 
+//import EventBus from '../common/EventBus';
+
 const { createAlchemyWeb3 } = require("@alch/alchemy-web3");
 const web3 = createAlchemyWeb3(API_URL);
 
 const user = JSON.parse(localStorage.getItem('user'));
 const initialState = user
   ? { status: { loggedIn: true }, user }
-  : { status: { loggedIn: false }, user: null };
+  : { status: { loggedIn: false }, user: null }
 
 export const auth = {
   namespaced: true,
@@ -106,6 +108,20 @@ export const auth = {
         }
       );
     },
+    uploadProfileImg({ commit, dispatch }, payload) {
+      return AuthService.upload(payload).then(
+        data => {
+          commit('uploadProfileImg', data);
+          return Promise.resolve(data);
+        },
+        error => {
+          if (error.response && error.response.status === 403) {
+            dispatch('logout')
+          }
+          return Promise.reject(error);
+        }
+      );
+    },
   },
   mutations: {
     loginSuccess(state, user) {
@@ -131,7 +147,7 @@ export const auth = {
       state.user = { ...state.user, accessToken: accessToken };
     },
     uploadProfileImg(state, payload) {
-      state.user.imageUrl = payload.imageUrl;
+      state.user['imageUrl'] = payload.imageUrl;
     },
     editProfile(state, user) {
       state.user.username = user.username;
@@ -140,5 +156,6 @@ export const auth = {
     },
   },
   getters: {
+   
   }
 };

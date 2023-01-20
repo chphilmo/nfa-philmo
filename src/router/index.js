@@ -7,7 +7,8 @@ import MintNfa from '../views/MintNfa.vue';
 import Nfa from '../views/Nfa.vue';
 import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
-import Profile from '../views/Profile.vue'
+import Profile from '../views/Profile.vue';
+import EditProfile from '../views/EditProfile.vue';
 
 Vue.use(Router);
 Vue.use(VueMeta);
@@ -56,6 +57,12 @@ export const router = new Router({
       component: Profile,
       meta: { requiresAuth: true }
     },
+    {
+      path: '/editprofile',
+      name: 'editprofile',
+      component: EditProfile,
+      meta: { requiresAuth: true }
+    }
   ]
 });
 

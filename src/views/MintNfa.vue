@@ -174,6 +174,9 @@ export default {
     };
   },
   computed: {
+    currentUser() {
+      return this.$store.state.auth.user;
+    },
     walletAddress () {
       return this.$store.getters['nfa/loadedWallet'];
     },
@@ -190,7 +193,9 @@ export default {
   
   },
   mounted() {
-  
+    if (!this.currentUser) {
+      this.$router.push('/user/login');
+    }
   },
   methods: {
     createNode: function() {

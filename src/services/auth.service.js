@@ -85,6 +85,23 @@ class AuthService {
         return response.data;
       });
   }
+
+  upload(matter) {
+    let formData = new FormData();
+
+    formData.append("file", matter);
+
+    return api
+      .post("/matter/img", formData, 
+      {
+        headers: {
+          "Content-Type": "multipart/form-data" }
+
+      })
+      .then(response => {
+        return response.data;
+      });
+  }
 }
 
 export default new AuthService();
