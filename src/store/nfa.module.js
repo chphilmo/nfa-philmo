@@ -12,7 +12,7 @@ const contractMarketPlace = require("../../artifacts/contracts/MaketPlace.sol/Ma
 
 console.log(JSON.stringify(contractMarketPlace.abi));
 
-const contractAddress = "0x1A1A411975AcF268C966a8835b430Ba02e7AbecB";
+const contractAddress = "0xFdCcb7E70f00DdDC8De238317a4Aba3C9347864f";
 const marketPlaceAddress = "0xC43b30E351676CD9c8bd00C6670008C8e88F75EE";
 const nftContract = new web3.eth.Contract(contractNft.abi, contractAddress);
 
@@ -22,7 +22,7 @@ export const nfa = {
   namespaced: true,
   state: {
     walletAddress: '',
-    nfaArray: [],
+    nfa: [],
     nfaAddress: [],
     imageUrl: '',
     message: ''
@@ -45,25 +45,35 @@ export const nfa = {
     // Load NFA from smart contract tokenUri function
     async loadNfa({ commit }) {
 
-      // get contract total supply and call tokenUri function for each token
-      const totalSupply = await nftContract.methods.totalSupply().call();
+      // get the total number of NFA minted
+      const totalNfa = await nftContract.methods.totalSupply().call();
+      const data = [];
 
-      const nfa = [];
+      for (let i = 0; i < totalNfa; i++) {
+      const nfaData = await nftContract.methods.tokenURI(i).call();
 
-      for (let i = 0; i < totalSupply; i++) {
-        const nfaData = await nftContract.methods.tokenURI(i).call();
-        nfa.push(nfaData);
+      const royalty = await nftContract.methods._getTokenRoyalty(i).call();
+      
+      // convert base64 to json
+      const json = atob(nfaData.split(',')[1]);
+        console.log(json);
+      //parse json        
+      const nfaJson = JSON.parse(json);
 
+      data.push( {
+        ...nfaJson,
+        royalty: royalty
+      })
+    }
 
-      }
-      commit('loadNfa', nfa);
+      // }
+      commit('loadNfa', data);
     },
 
 
     async mint({ commit }, payload) {
       const address = payload.walletAddress;
 
-      console.log(address)
       if (!window.ethereum || address === null) {
         commit('setMessage', "You must install Metamask 🦊, a virtual Ethereum wallet, in your browser.");
         return;
@@ -72,7 +82,7 @@ export const nfa = {
       const transactionParameters = {
         to: contractAddress, // Required except during contract publications.
         from: window.ethereum.selectedAddress, // must match user's active address.
-        'data': nftContract.methods.mint(window.ethereum.selectedAddress, payload.name, payload.description,
+        'data': nftContract.methods.mint(window.ethereum.selectedAddress, payload.name, payload.description.replaceAll(/\n/g, '\\n'), payload.image,
           payload.externalUrl, payload.ENS, payload.commitHash, payload.gitRepository, payload.animation).encodeABI() //make call to NFT smart contract 
       };
       //sign transaction via Metamask
@@ -300,16 +310,146 @@ export const nfa = {
       commit('nftByAddress', nftData);
 
     },
+
+    async updatename({ commit }, payload) {
+
+      const val = payload.val;
+      const tokenId = payload.tokenId;
+
+      if (!window.ethereum) {
+        commit('setMessage', "You must install Metamask 🦊, a virtual Ethereum wallet, in your browser.");
+        return;
+      }
+
+      await nftContract.methods.setTokenName(tokenId, val)
+        .send({
+          'from': window.ethereum.selectedAddress,
+          'gas': 200000
+        })
+        .on("confirmation", () => {
+          commit('setMessage', "Completed")
+        })
+        .catch(function (error) {
+          console.log(error);
+          commit('setMessage', error);
+        })
+
+    },
+
+    async updateImage({ commit }, payload) {
+
+      const image = payload.image;
+      const tokenId = payload.tokenId;
+
+      if (!window.ethereum) {
+        commit('setMessage', "You must install Metamask 🦊, a virtual Ethereum wallet, in your browser.");
+        return;
+      }
+
+      await nftContract.methods.setTokenImage(tokenId, image)
+        .send({
+          'from': window.ethereum.selectedAddress,
+          'gas': 200000
+        })
+        .on("confirmation", () => {
+          commit('setMessage', "Completed")
+        })
+        .catch(function (error) {
+          console.log(error);
+          commit('setMessage', error);
+        })
+
+    },
+
+    async setRoyalty({ commit }, payload) {
+
+      const val = Math.floor(payload.val * 100);
+      const tokenId = payload.tokenId;
+
+      if (!window.ethereum) {
+        commit('setMessage', "You must install Metamask 🦊, a virtual Ethereum wallet, in your browser.");
+        return;
+      }
+
+      await nftContract.methods.setTokenRoyalty(window.ethereum.selectedAddress,tokenId, val)
+        .send({
+          'from': window.ethereum.selectedAddress,
+          'gas': 200000
+        })
+        .on("confirmation", () => {
+          commit('setMessage', "Completed")
+        })
+        .catch(function (error) {
+          console.log(error);
+          commit('setMessage', error);
+        })
+
+    },
+
+    async setPrice({ commit }, payload) {
+
+      const val = payload.val;
+      const tokenId = payload.tokenId;
+      console.log(payload)
+      if (!window.ethereum) {
+        commit('setMessage', "You must install Metamask 🦊, a virtual Ethereum wallet, in your browser.");
+        return;
+      }
+
+      await nftContract.methods.setTokenValue(marketPlaceAddress, tokenId, web3.utils.toWei(val.toString()))
+        .send({
+          'from': window.ethereum.selectedAddress,
+          'gas': 200000
+        })
+        .on("confirmation", () => {
+          commit('setMessage', "Completed")
+        })
+        .catch(function (error) {
+          console.log(error);
+          commit('setMessage', error);
+        })
+
+    },
+
+    async updateAnimation({ commit }, payload) {
+
+      const html = payload.html;
+      const css = payload.css;  
+      const js = payload.js;
+      const tokenId = payload.tokenId;
+
+      console.log(payload)
+
+      if (!window.ethereum) {
+        commit('setMessage', "You must install Metamask 🦊, a virtual Ethereum wallet, in your browser.");
+        return;
+      }
+
+      await nftContract.methods.setTokenAnimation(tokenId, html, css, js)
+        .send({
+          'from': window.ethereum.selectedAddress,
+          'gas': 200000
+        })
+        .on("confirmation", () => {
+          commit('setMessage', "Completed")
+        })
+        .catch(function (error) {
+          console.log(error);
+          commit('setMessage', error);
+        })
+
+    },
+    
     setMessage({ commit }, payload) {
       commit('setMessage', payload);
     }
   },
   mutations: {
     uploadImg(state, payload) {
-      state.imageUrl = payload;
+      state.imageUrl = payload.ipfsHash;
     },
     loadNfa(state, payload) {
-      state.nfaArray = payload;
+      state.nfa = payload;
     },
     nftByAddress(state, payload) {
       state.nfaAddress = payload;
@@ -328,13 +468,7 @@ export const nfa = {
     },
     loadedNfas(state) {
       //return state.nfaArray.reverse()
-      return state.nfaArray.sort((nfaA, nfaB) => {
-        const da = new Date(nfaA._date)
-        const db = new Date(nfaB._date)
-        if (da === db) return 0
-
-        return da < db ? 1 : -1
-      });
+      return state.nfa
     },
     loadedNft(state) {
       return (elementId) => {

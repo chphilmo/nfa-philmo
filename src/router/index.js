@@ -4,6 +4,7 @@ import VueMeta from 'vue-meta';
 import Home from '../views/Home.vue';
 import Meta from '../views/Meta.vue';
 import MintNfa from '../views/MintNfa.vue';
+import ManageNfa from '../views/ManageNfa.vue';
 import Nfa from '../views/Nfa.vue';
 import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
@@ -34,6 +35,12 @@ export const router = new Router({
       path: '/mint',
       name: 'mintnfa',
       component: MintNfa,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/manage',
+      name: 'managenfa',
+      component: ManageNfa,
       meta: { requiresAuth: true }
     },
     {

@@ -210,7 +210,7 @@ export default {
           const mintData = {
             name: this.nfa.name,
             description: this.nfa.description, 
-            image: `https://ipfs.io/ipfs/${this.imgUrl}`,
+            image: "https://ipfs.io/ipfs/" + this.imgUrl,
             externalUrl: this.nfa.externalUrl,
             ENS: this.nfa.ENS,
             commitHash: this.nfa.commitHash,

@@ -30,6 +30,12 @@
           </router-link>
           </b-dropdown-item>
           <b-dropdown-item>
+          <router-link to="/manage" class="nav-link">
+            <b-icon icon="gear" class="h5"/> 
+            Manage
+          </router-link>
+          </b-dropdown-item>
+          <b-dropdown-item>
           <router-link to="/mint" class="nav-link">
             <b-icon icon="columns" class="h5"/> 
             Mint

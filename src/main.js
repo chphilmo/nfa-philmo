@@ -53,6 +53,6 @@ new Vue({
   render: h => h(App),
   created () {
   this.$store.dispatch('nfa/getCurrentWallet')
-  //this.$store.dispatch('nft/MatterSelled')
+  this.$store.dispatch('nfa/loadNfa')
   }
 }).$mount('#app')
