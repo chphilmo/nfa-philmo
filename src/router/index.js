@@ -10,6 +10,7 @@ import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
 import Profile from '../views/Profile.vue';
 import EditProfile from '../views/EditProfile.vue';
+import Contract from '../views/Contract.vue';
 
 Vue.use(Router);
 Vue.use(VueMeta);
@@ -41,6 +42,12 @@ export const router = new Router({
       path: '/manage',
       name: 'managenfa',
       component: ManageNfa,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/contract',
+      name: 'contract',
+      component: Contract,
       meta: { requiresAuth: true }
     },
     {

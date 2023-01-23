@@ -54,5 +54,6 @@ new Vue({
   created () {
   this.$store.dispatch('nfa/getCurrentWallet')
   this.$store.dispatch('nfa/loadNfa')
+  this.$store.dispatch('nfa/loadContract')
   }
 }).$mount('#app')

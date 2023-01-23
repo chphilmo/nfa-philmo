@@ -12,7 +12,7 @@ const contractMarketPlace = require("../../artifacts/contracts/MaketPlace.sol/Ma
 
 console.log(JSON.stringify(contractMarketPlace.abi));
 
-const contractAddress = "0xFdCcb7E70f00DdDC8De238317a4Aba3C9347864f";
+const contractAddress = "0xd71BcB652882d7306Dd67E57128c8731E53dBF26";
 const marketPlaceAddress = "0xC43b30E351676CD9c8bd00C6670008C8e88F75EE";
 const nftContract = new web3.eth.Contract(contractNft.abi, contractAddress);
 
@@ -56,7 +56,7 @@ export const nfa = {
       
       // convert base64 to json
       const json = atob(nfaData.split(',')[1]);
-        console.log(json);
+   
       //parse json        
       const nfaJson = JSON.parse(json);
 
@@ -68,6 +68,24 @@ export const nfa = {
 
       // }
       commit('loadNfa', data);
+    },
+
+    async loadContract() {
+
+      // get the total number of NFA minted
+   
+      const contractData = await nftContract.methods.contractURI().call();
+
+  
+      const json = atob(contractData.split(',')[1]);
+   
+      //parse json        
+      const nfaJson = JSON.parse(json);
+
+      console.log(nfaJson);
+    
+
+     
     },
 
 
@@ -426,6 +444,35 @@ export const nfa = {
       }
 
       await nftContract.methods.setTokenAnimation(tokenId, html, css, js)
+        .send({
+          'from': window.ethereum.selectedAddress,
+          'gas': 200000
+        })
+        .on("confirmation", () => {
+          commit('setMessage', "Completed")
+        })
+        .catch(function (error) {
+          console.log(error);
+          commit('setMessage', error);
+        })
+
+    },
+
+    async setContract({ commit }, payload) {
+
+      const name = payload.name;
+      const description = payload.description;  
+      const image = payload.image;
+      const externalLink = payload.externalLink;
+
+      console.log(payload)
+
+      if (!window.ethereum) {
+        commit('setMessage', "You must install Metamask 🦊, a virtual Ethereum wallet, in your browser.");
+        return;
+      }
+
+      await nftContract.methods.setContract(name, description.replaceAll(/\n/g, '\\n'), image, externalLink)
         .send({
           'from': window.ethereum.selectedAddress,
           'gas': 200000
