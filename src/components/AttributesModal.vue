@@ -1,9 +1,9 @@
 <template>
   <div>
-    <b-button v-b-modal.modal-prevent-closing>Create Attributes</b-button>
+    <b-button v-b-modal.modal-prevent-closing3>Manage Build</b-button>
 
     <b-modal
-      id="modal-prevent-closing"
+      id="modal-prevent-closing3"
       ref="modal"
       title="Submit Article Section"
       @show="resetModal"
@@ -12,24 +12,24 @@
     >
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <b-form-group
-          label="Trait_type"
-          label-for="trait-input"
+          label="Commit Hash"
+          label-for="commit-input"
         >
           <b-form-input
-            id="trait-input"
-            v-model="trait_type"
+            id="commit-input"
+            v-model="commitHash"
             required
           ></b-form-input>
         </b-form-group>
 
         <b-form-group
-          label="Value"
-          label-for="value-input"
+          label="Git Repository"
+          label-for="git-input"
   
         >
           <b-form-input
-          id="value-input"
-          v-model="value"
+          id="git-input"
+          v-model="gitRepository"
           required
         ></b-form-input>
         </b-form-group>
@@ -43,8 +43,8 @@
   export default {
     data() {
       return {
-        trait_type: '',
-        value: ''
+        commitHash: '',
+        gitRepository: ''
       }
     },
     computed: {
@@ -53,8 +53,8 @@
     methods: {
       
       resetModal() {
-        this.trait_type = '',
-        this.value = ''
+        this.commitHash = ''
+        this.gitRepository = ''
       },
       handleOk(bvModalEvt) {
         // Prevent modal from closing
@@ -64,18 +64,18 @@
       },
       handleSubmit() {
         // Exit when the form isn't valid
-        if (this.value === '' || this.trait_type === '') {
+        if (this.commitHash === '' || this.gitRepository === '') {
           return
         }
         
         const attributesData = {
-          trait_type: this.trait_type, 
-          value: this.value
+          commitHash: this.commitHash,
+          gitRepository: this.gitRepository
         }
-        this.$emit('logAttributes', attributesData)
+        this.$emit('logBuild', attributesData)
 
         this.$nextTick(() => {
-          this.$bvModal.hide('modal-prevent-closing')
+          this.$bvModal.hide('modal-prevent-closing3')
         })
       }
     }

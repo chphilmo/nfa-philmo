@@ -39,9 +39,10 @@ export const router = new Router({
       meta: { requiresAuth: true }
     },
     {
-      path: '/manage',
+      path: '/manage/:id',
       name: 'managenfa',
       component: ManageNfa,
+      props: true,
       meta: { requiresAuth: true }
     },
     {

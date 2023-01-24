@@ -9,7 +9,7 @@
 
     <div>
       <b-row>
-        <b-col md="5" lg="3" class="mt-3" v-for="(nfa,index) in nfaArray" :key="index">
+        <b-col xs="12" md="4" lg="3" class="mt-3" v-for="(nfa,index) in nfaArray" :key="index">
           <b-card text-variant="dark">
 
             <b-img class="mb-3" :src="nfa.image" fluid></b-img>
@@ -24,8 +24,17 @@
                 <div>{{ nfa.external_url }}</div>
               </b-col>
               <b-col cols="auto">
-                <div class="price">{{ nfa.value / Math.pow(10, 18) }} Ethers</div>
+                <b-button variant="faded" v-if="nfa.onSale" @click="transferFrom(index, nfa.value)" size="sm">
+              <b-icon icon="cart-plus"></b-icon> Buy
+              <span class="subheading mx-1">{{ nfa.value / Math.pow(10,18) }} ETH</span>
+            </b-button>
+            <div v-else class="price">{{ nfa.value / Math.pow(10, 18) }} ETH</div>
                 <div class="price">{{ nfa.royalty['1'] / 100 }} %</div>
+
+                <b-button variant="faded" v-if="userIsOwner(nfa.owner)" :to="'/manage/'+ index" size="sm">
+              <b-icon icon="gear"></b-icon> Manage
+  
+            </b-button>
               </b-col>
             </b-row>
 
@@ -66,10 +75,41 @@ export default {
     nfaArray() {
       return this.$store.getters['nfa/loadedNfas'];
     },
+    currentUser() {
+      return this.$store.state.auth.user;
+    },
+    walletAddress () {
+      return this.$store.getters['nfa/loadedWallet'];
+    },
+    wallet () {
+      if (this.walletAddress === '') {
+        return 'Connect Wallet'
+      } else {
+        return String(this.walletAddress);
+      }
+    },
 
   },
   methods: {
-
+    transferFrom: function(tokenId, value) {
+      if (this.walletAddress === "") {
+        console.log("connect a wallet");
+        this.$store.dispatch('nfa/setMessage', "connect a wallet");
+        return;
+      }
+      
+      const sellData = {
+        id: tokenId,
+        value: value
+      }
+      this.$store.dispatch('nfa/transferNft', sellData);
+    },
+    userIsOwner (address) {
+      if (!this.walletAddress) {
+        return false
+      }
+      return this.walletAddress === address
+    },
   }
 };
 </script>

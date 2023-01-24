@@ -39,7 +39,7 @@
           <label for="externalUrl">External Link</label>
           <div>Link to your website</div>
           <input
-            v-model="contract.externalLink"
+            v-model="contract.external_link"
             type="text"
             class="form-control"
             name="externalUrl"
@@ -58,7 +58,18 @@
             accept="image/*"
             @change="onFilePicked">
   
-          <img :src="imageUrl" height="200">
+          <b-row>
+            <b-col cols="6">
+                <img :src="imageUrl" height="200">
+
+          
+            </b-col>
+            <b-col cols="6">
+
+                <img :src="contract.image" height="200">
+
+            </b-col>
+          </b-row>
   
           <div class="add">{{ imgUrl }}</div>
   
@@ -92,12 +103,7 @@
         message: '',
         imageUrl: '',
         image: '',
-        contract: {
-          name: '',
-          description: '',
-          image: '',
-          externalLink: '',
-        }
+        
   
       };
     },
@@ -114,6 +120,9 @@
         } else {
           return String(this.walletAddress);
         }
+      },
+      contract () {
+        return this.$store.getters['nfa/loadedContract'];
       },
       imgUrl () {
         return this.$store.getters['nfa/loadedImgUrl'];
@@ -139,7 +148,7 @@
               name: this.contract.name,
               description: this.contract.description, 
               image: "https://ipfs.io/ipfs/" + this.imgUrl,
-              externalLink: this.contract.externalLink
+              externalLink: this.contract.external_link
             }
             this.$store.dispatch('nfa/setContract', contractData)
             this.loading = false;

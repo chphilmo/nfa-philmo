@@ -30,6 +30,12 @@
           </router-link>
           </b-dropdown-item>
           <b-dropdown-item>
+          <router-link to="/contract" class="nav-link">
+            <b-icon icon="book" class="h5"/> 
+            Contract
+          </router-link>
+          </b-dropdown-item>
+          <b-dropdown-item>
           <router-link to="/manage" class="nav-link">
             <b-icon icon="gear" class="h5"/> 
             Manage

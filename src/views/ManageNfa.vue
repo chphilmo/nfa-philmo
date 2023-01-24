@@ -7,12 +7,20 @@
         </b-jumbotron>
        
       </header>
-      <div class="mt-3">Token ID</div>
-      <b-form-select v-model="selected2" :options="options2"></b-form-select>
+      <div v-if="nfa" class="mt-3">Token ID: {{ nfa.id }}</div>
       <div class="mt-3">Upload Strings</div>
       <b-form-select v-model="selected" :options="options"></b-form-select>
       <CreateTag class="mt-2" :field="selected" @logValue="logValue" />
-      
+
+      <div v-if="nfa">
+      <div>Name: {{ nfa.name }}</div>
+        <div>Description: {{ nfa.description }}</div>
+        <div>External URL: {{ nfa.external_url }}</div>
+
+        <div v-for="(attr, index ) in nfa.attributes" :key="index">
+                  {{ attr.trait_type }}: {{ attr.value }}
+                </div>
+        </div>
       <div class="form-group mt-3">
       <div><b>Image content</b></div>
         <b-button variant="nature1" @click="onPickFile">Upload image </b-button>
@@ -23,7 +31,18 @@
           accept="image/*"
           @change="onFilePicked">
 
-        <img :src="imageUrl" height="200">
+          <b-row>
+            <b-col cols="6">
+                <img :src="imageUrl" height="200">
+
+          
+            </b-col>
+            <b-col cols="6">
+
+                <img v-if="nfa"  :src="nfa.image" height="200">
+
+            </b-col>
+          </b-row>
 
         <div class="add">{{ imgUrl }}</div>
 
@@ -35,7 +54,7 @@
         <label for="html">html</label>
         <b-form-textarea
           id="html"
-          v-model="nfa.animation.html"
+          v-model="nfaData.animation.html"
           placeholder="..."
           rows="3"
           max-rows="6"
@@ -46,7 +65,7 @@
         <label for="css">css</label>
         <b-form-textarea
           id="css"
-          v-model="nfa.animation.css"
+          v-model="nfaData.animation.css"
           placeholder="..."
           rows="3"
           max-rows="6"
@@ -57,7 +76,7 @@
         <label for="js">js</label>
         <b-form-textarea
           id="js"
-          v-model="nfa.animation.js"
+          v-model="nfaData.animation.js"
           placeholder="..."
           rows="3"
           max-rows="6"
@@ -68,6 +87,16 @@
 
       <b-form-select class="mt-3" v-model="selected3" :options="options3"></b-form-select>
       <SetValue class="mt-3" :value="selected3" @logData="logData" />
+
+      <AttributesModal class="mt-3" @logBuild="logBuild" />
+
+      <b-button class="mt-3" variant="nature1" @click="unlistNft">
+              <b-icon icon="bag-x"></b-icon> Unlist
+            </b-button>
+
+            <b-card bg-variant="light">
+                <div v-if="nfa" v-html="nfa.animation_url" class="mt-3"></div>
+            </b-card>
       
     </div>
   </template>
@@ -76,12 +105,15 @@
   
   import CreateTag from '../components/CreateTag.vue';
     import SetValue from '../components/SetValue.vue';
+    import AttributesModal from '../components/AttributesModal.vue';
   
   export default {
     name: 'mintnfa',
+    props: ['id'],
     components: {
         CreateTag,
-        SetValue
+        SetValue,
+        AttributesModal
     },
     data() {
       return {
@@ -91,28 +123,18 @@
         image: '',
         selected: null,
             options: [
-                { value: 'name', text: 'name' },
-                { value: 'description', text: 'description' },
-                { value: 'externa_url', text: 'external_url' },
+                { value: 'Name', text: 'Name' },
+                { value: 'Description', text: 'Description' },
+                { value: 'ExternaUrl', text: 'ExternalUrl' },
                 { value: 'ENS', text: 'ENS' },
-                { value: 'commitHash', text: 'Commit Hash' },
-                { value: 'gitRepository', text: 'Git Repository' }
             ],
-            selected2: null,
-            options2: [
-                { value: '0', text: '0' },
-                { value: '1', text: '1' },
-                { value: '2', text: '2' },
-                { value: '3', text: '3' },
-                { value: '4', text: '4' },
-                { value: '5', text: '5' }
-            ],
+         
             selected3: null,
             options3: [
                 { value: 'Price', text: 'Price' },
                 { value: 'Royalty', text: 'Royalty' }
             ],
-        nfa: {
+        nfaData: {
           animation: {
             html: '',
             css: '',
@@ -136,6 +158,9 @@
           return String(this.walletAddress);
         }
       },
+      nfa () {
+      return this.$store.getters['nfa/loadedNfa'](this.id);
+    },
       imgUrl () {
         return this.$store.getters['nfa/loadedImgUrl'];
       },
@@ -171,7 +196,7 @@
        // get the value of the key
          let newValue = {
             val: value[key[0]],
-            tokenId: this.selected2
+            tokenId: this.id
          } 
 
        this.$store.dispatch('nfa/update' + key[0], newValue)
@@ -181,35 +206,60 @@
        // get the value of the key
          let newValue = {
             val: value[key[0]],
-            tokenId: this.selected2
+            tokenId: this.id
          } 
+         
 
        this.$store.dispatch('nfa/set' + key[0], newValue)
         },
+      
+    logBuild: function (value) {
+
+        const data = {
+            commitHash: value.commitHash,
+            gitRepository: value.gitRepository,
+            tokenId: this.id
+        }
+
+        this.$store.dispatch('nfa/updateBuild', data)
+
+    },
         updateImage: function () {
             const imgData = "https://ipfs.io/ipfs/" + this.imgUrl
 
             const data = {
                 image: imgData,
-                tokenId: this.selected2
+                tokenId: this.id
             }
     
             this.$store.dispatch('nfa/updateImage', data)
         },
         updateAnimation: function () {
             const data = {
-                html: this.nfa.animation.html,
-                css: this.nfa.animation.css,
-                js: this.nfa.animation.js
+                html: this.nfaData.animation.html,
+                css: this.nfaData.animation.css,
+                js: this.nfaData.animation.js
             }
 
             const dataObj = {
                 ...data,
-                tokenId: this.selected2
+                tokenId: this.id
             }
 
             this.$store.dispatch('nfa/updateAnimation', dataObj)
-        }
+        },
+        unlistNft: function() {
+      if (this.walletAddress === "") {
+        console.log("connect a wallet");
+        return;
+      }
+      
+      const nfaData = {
+        address: this.walletAddress,
+        id: this.id
+      }
+      this.$store.dispatch('nfa/unlistNfa', nfaData);
+    },
     }
   };
   </script>
