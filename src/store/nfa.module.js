@@ -10,7 +10,6 @@ const contractNft = require("../../artifacts/contracts/PhimoNFA.sol/PhimoNFA.jso
 
 const contractMarketPlace = require("../../artifacts/contracts/MaketPlace.sol/Marketplace.json");
 
-console.log(JSON.stringify(contractMarketPlace.abi));
 
 const contractAddress = "0x4c0c0D351Ded840A660501f23F73b096cDeA89dE";
 const marketPlaceAddress = "0xC43b30E351676CD9c8bd00C6670008C8e88F75EE";
@@ -62,7 +61,7 @@ export const nfa = {
       const nfaJson = JSON.parse(json);
 
       const animation = atob(nfaJson.animation_url.split(',')[1]);
-        console.log(nfaJson)
+       
 
       data.push( {
         id: i,
