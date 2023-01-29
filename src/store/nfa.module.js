@@ -105,6 +105,16 @@ export const nfa = {
     async mint({ commit }, payload) {
       const address = payload.walletAddress;
 
+      const html = payload.animation.html.replaceAll(/\n/g, '\\n');
+      const css = payload.animation.css.replaceAll(/\n/g, '\\n');
+      const js = payload.animation.js.replaceAll(/\n/g, '\\n');
+
+      const animation = {
+        html: html,
+        css: css,
+        js: js
+      }
+
       if (!window.ethereum || address === null) {
         commit('setMessage', "You must install Metamask 🦊, a virtual Ethereum wallet, in your browser.");
         return;
@@ -114,7 +124,7 @@ export const nfa = {
         to: contractAddress, // Required except during contract publications.
         from: window.ethereum.selectedAddress, // must match user's active address.
         'data': nftContract.methods.mint(window.ethereum.selectedAddress, payload.name, payload.description.replaceAll(/\n/g, '\\n'), payload.image,
-          payload.externalUrl, payload.ENS, payload.commitHash, payload.gitRepository, payload.animation).encodeABI() //make call to NFT smart contract 
+          payload.externalUrl, payload.ENS, payload.commitHash, payload.gitRepository, animation).encodeABI() //make call to NFT smart contract 
       };
       //sign transaction via Metamask
       try {
