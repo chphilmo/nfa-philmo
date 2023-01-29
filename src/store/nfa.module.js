@@ -12,7 +12,7 @@ const contractMarketPlace = require("../../artifacts/contracts/MaketPlace.sol/Ma
 
 console.log(JSON.stringify(contractMarketPlace.abi));
 
-const contractAddress = "0xd71BcB652882d7306Dd67E57128c8731E53dBF26";
+const contractAddress = "0x4c0c0D351Ded840A660501f23F73b096cDeA89dE";
 const marketPlaceAddress = "0xC43b30E351676CD9c8bd00C6670008C8e88F75EE";
 const nftContract = new web3.eth.Contract(contractNft.abi, contractAddress);
 
@@ -57,17 +57,28 @@ export const nfa = {
       
       // convert base64 to json
       const json = atob(nfaData.split(',')[1]);
-   
+      
       //parse json        
       const nfaJson = JSON.parse(json);
 
+      const animation = atob(nfaJson.animation_url.split(',')[1]);
+        console.log(nfaJson)
+
       data.push( {
         id: i,
-        ...nfaJson,
+        name: nfaJson.name,
+        description: nfaJson.description,
+        image: nfaJson.image,
+        animation_url: animation,
+        external_url: nfaJson.external_url,
+        onSale: nfaJson.onSale,
+        owner: nfaJson.owner,
+        value: nfaJson.value,
+        attributes: nfaJson.attributes,
         royalty: royalty
       })
     }
-
+    
       // }
       commit('loadNfa', data);
     },
@@ -404,9 +415,9 @@ export const nfa = {
 
     async updateAnimation({ commit }, payload) {
 
-      const html = payload.html;
-      const css = payload.css;  
-      const js = payload.js;
+      const html = payload.html.replaceAll(/\n/g, '\\n');
+      const css = payload.css.replaceAll(/\n/g, '\\n');  
+      const js = payload.js.replaceAll(/\n/g, '\\n');
       const tokenId = payload.tokenId;
 
 
@@ -418,7 +429,7 @@ export const nfa = {
       await nftContract.methods.setTokenAnimation(tokenId, html, css, js)
         .send({
           'from': window.ethereum.selectedAddress,
-          'gas': 200000
+          //'gas': 200000
         })
         .on("confirmation", () => {
           commit('setMessage', "Completed")

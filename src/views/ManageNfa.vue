@@ -90,12 +90,13 @@
 
       <AttributesModal class="mt-3" @logBuild="logBuild" />
 
-      <b-button class="mt-3" variant="nature1" @click="unlistNft">
+      <b-button v-if="nfa.onSale" class="mt-3" variant="nature1" @click="unlistNft">
               <b-icon icon="bag-x"></b-icon> Unlist
             </b-button>
 
             <b-card bg-variant="light">
-                <div v-if="nfa" v-html="nfa.animation_url" class="mt-3"></div>
+              <iframe :srcdoc="nfa.animation_url"></iframe>
+           
             </b-card>
       
     </div>
@@ -284,4 +285,9 @@
   .add {
       font-size: 10pt;
   }
+
+  iframe {
+  width: 100%;
+  height: 350px;
+}
   </style>
